@@ -6,15 +6,15 @@ import java.util.Locale;
 
 public class ForecastTimestamp {
     public String forecastTimeUtc;
-    public double airTemperature;
+    public int airTemperature;
     public double feelsLikeTemperature;
     public int windSpeed;
-    public double windGust;
+    public int windGust;
     public int windDirection;
     public int cloudCover;
-    public double seaLevelPressure;
+    public int seaLevelPressure;
     public int relativeHumidity;
-    public int totalPrecipitation;
+    public double totalPrecipitation;
     public String conditionCode;
 
     public static DateTimeFormatter datosFormatasH = DateTimeFormatter.ofPattern("yyyy-LLLL-dd  (HH 'h') ", Locale.of("LT"));
@@ -62,5 +62,27 @@ public class ForecastTimestamp {
                 "'" + totalPrecipitation + "', " +
                 "'" + conditionCode + "', ";
 
+    }
+
+    // Getters
+
+    public String getForecastTimeUtc() {
+        return forecastTimeUtc;
+    }
+
+    public int getAirTemperature() {
+        return airTemperature;
+    }
+
+    public double getFeelsLikeTemperature() {
+        return feelsLikeTemperature;
+    }
+
+    public int getWindSpeed() {
+        return windSpeed;
+    }
+
+    public String getConditionCode() {
+        return conditionCode;
     }
 }

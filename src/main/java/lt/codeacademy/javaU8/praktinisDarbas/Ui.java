@@ -91,10 +91,15 @@ public class Ui {
     }
 
 
-    public static void printRoot(String duration, Optional<Root> root){
-        if (duration.equalsIgnoreCase("week")){
-        System.out.println(root.get());
-        } else System.out.println(root.get().toStringDay());
+    public static void printRoot(String duration, Optional<Root> root) {
+        if (duration.equalsIgnoreCase("week")) {
+            Meteo.processShortInfo("week", root);
+            System.out.println(root.get());
+
+        } else {
+            Meteo.processShortInfo("day", root);
+            System.out.println(root.get().toStringDay());
+        }
     }
 
 
@@ -185,6 +190,64 @@ public class Ui {
     public static void printDeleting(){
         System.out.println("Deleting forecast data from MySQL.");
     }
+
+
+    public static void printFancyLocation(String placeName) {
+
+        System.out.printf("┌───────────────────────────────────────┐\n" +
+                "│              " + "%-25s│\n" +
+                "└───────────────────────────────────────┘\n",
+                placeName);
+    }
+
+
+
+    public static void printShortInfo(String date, String dayOfWeek, String highestAirTemperature, String lowestAirTemperature, String averageFeelsLikeTemperature, String averageWindSpeed, String mostOccurringConditionCode){
+        String completeDate = dayOfWeek + " ("+ date + ")";
+        String fromTo =  "From " + lowestAirTemperature + " to " +  highestAirTemperature + "°C ";
+        String feelsLike =  "Feels like " + averageFeelsLikeTemperature + "°C";
+        String windStr = "Wind speed " + averageWindSpeed +"m/s";
+
+        String colorA = (fromTo.chars().filter(ch -> ch == '-').count() == 2) ? "\u001B[34m" : "\u001B[31m";
+        String colorF = (feelsLike.contains("-")) ? "\u001B[34m" : "\u001B[31m";
+        String resetColor = "\u001B[0m";  // default colour
+
+
+
+
+        System.out.printf(
+                        "┌───────────────────────────────────────┐\n" +
+                        "│          " + "%-29s" + "│\n" +
+                        "├───────────────────────────────────────┤\n" +
+                        "│         " + "%s %-29s" + "%s│\n"+
+                        "│         " +  "%s %-29s" + "%s│\n"+
+                        "│                                       │\n"+
+                        "│          " +   "%-29s" + "│\n"+
+                        "│          " +  "%-29s" + "│\n"+
+                        "└───────────────────────────────────────┘\n",
+                completeDate, colorA, fromTo, resetColor, colorF, feelsLike, resetColor, windStr, mostOccurringConditionCode);
+
+
+
+
+
+/*
+
+        System.out.println("Date: " + date + dayOfWeek );
+        System.out.println("Highest Air Temperature: " + highestAirTemperature);
+        System.out.println("Lowest Air Temperature: " + lowestAirTemperature);
+        System.out.println("\"%.1f%n\",Average Feels Like Temperature: " + averageFeelsLikeTemperature);
+        System.out.println("Average Wind Speed: " + averageWindSpeed);
+        System.out.println("Most Occurring Condition Code: " + mostOccurringConditionCode);
+        System.out.println();
+*/
+
+
+
+
+    }
+
+
 
 
 }
