@@ -71,10 +71,5 @@ public class Main {
         Meteo meteo = new Meteo(new Ui());
         meteo.start();
 
-
-
-
-
-
     }
 }

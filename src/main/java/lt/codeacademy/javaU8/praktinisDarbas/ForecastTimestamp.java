@@ -1,5 +1,9 @@
 package lt.codeacademy.javaU8.praktinisDarbas;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 public class ForecastTimestamp {
     public String forecastTimeUtc;
     public double airTemperature;
@@ -13,14 +17,24 @@ public class ForecastTimestamp {
     public int totalPrecipitation;
     public String conditionCode;
 
+    public static DateTimeFormatter datosFormatasH = DateTimeFormatter.ofPattern("yyyy-LLLL-dd  (HH 'h') ", Locale.of("LT"));
+
+
 
 
 
     @Override
     public String toString () {
-        return "Time: " + forecastTimeUtc +
-                ", aT= " + airTemperature +
-                ", fT= " + feelsLikeTemperature +
+
+        //            item         =   condition          ?   True(blue) :   False (red)
+        String colorA = (airTemperature < 0) ? "\u001B[34m" : "\u001B[31m";
+        String colorF = (feelsLikeTemperature < 0) ? "\u001B[34m" : "\u001B[31m";
+
+        String resetColor = "\u001B[0m";  // default colour
+
+        return "Time: " + forecastTimeUtc.substring(0,16) +
+                " - aT= " + colorA + airTemperature +  resetColor +
+                ", fT= " + colorF + feelsLikeTemperature +  resetColor +
                 ", windSpeed= " + windSpeed +
                 ", windGust= " + windGust +
                 ", windDirection= " + windDirection +
@@ -36,7 +50,7 @@ public class ForecastTimestamp {
 
 
     public String toMySQL () {
-        return  "'" + forecastTimeUtc + "', " +
+        return  "'" + forecastTimeUtc.substring(0,16) + "', " +
                 "'" + airTemperature + "', " +
                 "'" + feelsLikeTemperature + "', " +
                 "'" + windSpeed + "', " +

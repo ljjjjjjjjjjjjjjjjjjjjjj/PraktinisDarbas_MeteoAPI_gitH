@@ -37,7 +37,8 @@ public class HttpData {
 
     }
 
-
+    // My old method - with Optional <RootPlace[]>
+    /*
     public static Optional <RootPlace[]> getPlaceFromHttp() {
 
         HttpClient client = HttpClient.newHttpClient();
@@ -63,7 +64,28 @@ public class HttpData {
             return Optional.empty();
         }
 
+    }
+    */
 
+    public static List<Place> getPlacesFromApi() {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.meteo.lt/v1/places"))
+                .GET()
+                .build();
+
+        try {
+            HttpResponse<String> response = client
+                    .send(request, HttpResponse.BodyHandlers.ofString());
+            String jsonFromMeteo = response.body();
+
+            return ReadValue_of_ObjectMapper.readValueOfPlace(jsonFromMeteo);
+
+        } catch (Exception e) {
+            Ui.printWrongInput();
+            return Collections.emptyList();
+        }
     }
 
 

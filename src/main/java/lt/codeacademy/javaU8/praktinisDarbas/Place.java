@@ -21,22 +21,15 @@ public class Place {
                 " ("+ administrativeDivision + ", " + countryCode + ")\n";
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    // "INSERT INTO place (placeCode, placeName, administrativeDivision, countryCode)
 
     public String toMySQL () {
         return "'" + code + "', " +
                 "'" + name + "', " +
                 "'" + administrativeDivision + "', " +
                 "'" + countryCode +"'";
-
     }
 
     public String codeToMySQL () {
         return "'" + code + "'";
-
     }
 }

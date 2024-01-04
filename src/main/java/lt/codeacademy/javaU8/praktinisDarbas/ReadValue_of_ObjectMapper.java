@@ -10,7 +10,6 @@ public class ReadValue_of_ObjectMapper {
         ObjectMapper om = new ObjectMapper();
 
         try {
-
             return Optional.of(om.readValue(jsonFromMeteo, Root.class));
 
         }catch(Exception e){
@@ -20,21 +19,18 @@ public class ReadValue_of_ObjectMapper {
     }
 
 
-    public static Optional< RootPlace[]> readValueOfPlaces(String jsonFromMeteo) {
-
+    public static List<Place> readValueOfPlace(String jsonFromMeteo){
         ObjectMapper om = new ObjectMapper();
 
-
         try {
-            RootPlace[] rootPlaces = om.readValue(jsonFromMeteo, RootPlace[].class);
-            return Optional.of(rootPlaces);
+            return om.readValue(jsonFromMeteo, om.getTypeFactory().constructCollectionType(List.class, Place.class));
 
-        } catch (Exception e) {
-            System.out.println("Klaida 'readValueOfPlaces' ");
-            return Optional.empty();
+        }catch(Exception e){
+            Ui.printWrongInput();
         }
-    }
+        return Collections.emptyList();
 
+    }
 
 
 

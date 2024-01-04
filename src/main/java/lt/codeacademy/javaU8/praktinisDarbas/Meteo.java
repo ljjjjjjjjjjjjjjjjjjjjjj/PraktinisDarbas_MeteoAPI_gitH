@@ -34,43 +34,91 @@ public class Meteo {
             return false;
 
         switch (userMenuInput){
-            case "1" -> showForecast("Vilnius");
-            case "2" -> showForecast("Kaunas");
-            case "3" -> showForecast(searchPlaceName());
-            case "4" -> saveForecastToMySQL();
-            case "5" -> showDataBaseForecast();
+            case "1" -> startWeekMenu();
+            case "2" -> startDayMenu();
+            case "3" -> showDataBaseForecast();
+            case "4" -> deleteDataBaseForecast();
             default -> Ui.printWrongOption();
         }
         return true;
     }
 
 
-    private Root getForecast(String placeCode) {
-        Root root = new Root();
+    boolean processWeekMenuOption(String userMenuInput){
+        if (userMenuInput.equalsIgnoreCase("M"))
+            return false;
+
+        switch (userMenuInput){
+            case "1" -> showForecast("week", "Vilnius");
+            case "2" -> showForecast("week","Kaunas");
+            case "3" -> showForecast("week", searchPlaceName());
+            case "4" -> saveForecastToMySQL("week");
+            default -> Ui.printWrongOption();
+        }
+        return true;
+    }
+
+    public void startDayMenu() {
+        boolean continueDayMenu = true;
+
+        while (continueDayMenu) {
+            ui.printDayMenu();
+            String userDayMenuInput = ui.getUserMenuOption();
+            continueDayMenu = processDayMenuOption(userDayMenuInput);
+
+        }
+
+    }
+
+    boolean processDayMenuOption(String userMenuInput){
+        if (userMenuInput.equalsIgnoreCase("M"))
+            return false;
+
+        switch (userMenuInput){
+            case "1" -> showForecast("day", "Vilnius");
+            case "2" -> showForecast("day","Kaunas");
+            case "3" -> showForecast("day", searchPlaceName());
+            case "4" -> saveForecastToMySQL("day");
+            default -> Ui.printWrongOption();
+        }
+        return true;
+    }
+
+    public void startWeekMenu() {
+        boolean continueWeekMenu = true;
+
+        while (continueWeekMenu) {
+            ui.printWeekMenu();
+            String userWeekMenuInput = ui.getUserMenuOption();
+            continueWeekMenu = processWeekMenuOption(userWeekMenuInput);
+
+        }
+
+    }
+
+
+    private Optional<Root> getForecast(String placeCode) {
 
         if (placeCode.equals("error")) {
             Ui.printNoData();
-            root = null;
+
         } else {
 
             String url = "https://api.meteo.lt/v1/places/" + placeCode + "/forecasts/long-term";
+            return HttpData.getAllDataFromHttp(url);
 
-            Optional<Root> meteoForecast = HttpData.getAllDataFromHttp(url);
-
-            if (meteoForecast.isPresent()) {
-                root = meteoForecast.get();
-            }
         }
-        return root;
+        return Optional.empty();
     }
 
-    private void showForecast(String placeCode) {
-        Root root = getForecast(placeCode);
-        Ui.printRoot(root);
+    private void showForecast(String duration, String placeCode) {
+        if (getForecast(placeCode).isPresent())
+        Ui.printRoot(duration, getForecast(placeCode));
     }
 
 
 
+    /*
 
     private String searchPlaceName() {
 
@@ -91,9 +139,10 @@ public class Meteo {
 
         return userInput;
     }
+    */
 
 
-
+    /*
     public static HashMap<String, String> createHmapPlaces () {
         Optional<RootPlace[]> opt = HttpData.getPlaceFromHttp();
 
@@ -109,22 +158,53 @@ public class Meteo {
 
         } else return null;
     }
+    */
 
-    public void saveForecastToMySQL(){
-        System.out.println("Saving selected forecast to MySQL");
+
+    private String searchPlaceName() {
+
+        Ui.printSelectPlace();     // "Please enter the location: "
+        String userInput = ui.getUserInput().toLowerCase(); // "user input"
+
+        List<Place> list = HttpData.getPlacesFromApi();
+
+        if (!list.isEmpty()){
+        for (Place place : list) {
+            if (place.name.equalsIgnoreCase(userInput)) {
+                return place.code;
+            }
+        }
+        } return "error";
+    }
+
+
+
+
+    public void saveForecastToMySQL(String duration){
+        Ui.printSaving();
 
         String placeCode = searchPlaceName();
-        Root root = getForecast(placeCode);
-
-        MySQLDatabase.saveDataToMySQL(root);
+        if (getForecast(placeCode).isPresent())
+        MySQLDatabase.saveDataToMySQL(duration, getForecast(placeCode));
 
 
     }
     public static void showDataBaseForecast(){
-        System.out.println("Show saved forecasts from MySQL ");
+        Ui.printShow();
         MySQLDatabase.showDataFromMySQL();
 
     }
 
 
-    } // class end
+
+
+    public static void  deleteDataBaseForecast(){
+        Ui.printDeleting();
+        MySQLDatabase.deleteDataFromMySQL();
+    }
+
+
+
+
+
+} // class end
