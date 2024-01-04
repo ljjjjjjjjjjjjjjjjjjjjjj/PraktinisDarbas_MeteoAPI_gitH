@@ -32,17 +32,21 @@ public class ForecastTimestamp {
     }
 
 
+    // forecastTimeUtc, airTemperature, feelsLikeTemperature, windSpeed, windGust, windDirection, cloudCover, seaLevelPressure, relativeHumidity, totalPrecipitation, conditionCode, +  placeCode,
+
+
     public String toMySQL () {
-        return "'" + forecastTimeUtc + "', " +
+        return  "'" + forecastTimeUtc + "', " +
                 "'" + airTemperature + "', " +
                 "'" + feelsLikeTemperature + "', " +
                 "'" + windSpeed + "', " +
                 "'" + windGust + "', " +
                 "'" + windDirection + "', " +
                 "'" + cloudCover + "', " +
+                "'" + seaLevelPressure + "', " +
                 "'" + relativeHumidity + "', " +
                 "'" + totalPrecipitation + "', " +
-                "'" + conditionCode + "'";
+                "'" + conditionCode + "', ";
 
     }
 }

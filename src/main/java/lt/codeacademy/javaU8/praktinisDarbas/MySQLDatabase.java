@@ -55,9 +55,8 @@ public class MySQLDatabase {
 
     public static String getForecastString(Root root) {
         // "INSERT INTO forecast
-        // (placeCode, forecastTimeUtc, airTemperature, feelsLikeTemperature, windSpeed, windGust, windDirection, cloudCover, seaLevelPressure, relativeHumidity, totalPrecipitation, conditionCode),
-        // (placeCode, forecastTimeUtc, airTemperature, feelsLikeTemperature, windSpeed, windGust, windDirection, cloudCover, seaLevelPressure, relativeHumidity, totalPrecipitation, conditionCode);
-
+        // (forecastTimeUtc, airTemperature, feelsLikeTemperature, windSpeed, windGust, windDirection, cloudCover, seaLevelPressure, relativeHumidity, totalPrecipitation, conditionCode, placeCode),
+        // (forecastTimeUtc, airTemperature, feelsLikeTemperature, windSpeed, windGust, windDirection, cloudCover, seaLevelPressure, relativeHumidity, totalPrecipitation, conditionCode, placeCode);
 
         if (root != null) {
             String forecastString = "INSERT INTO forecast VALUES " + root.toMySQL();
@@ -90,6 +89,37 @@ public class MySQLDatabase {
 
         } else {
             System.out.println("query != null");
+        }
+    }
+
+    public static void showDataFromMySQL(){
+
+        String url = "jdbc:mysql://localhost:3306/orai";
+        String user = "root";
+        String password = "ManoMySQL2023*";
+
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+
+            if (connection != null) {
+                System.out.println("Connection to DB established");
+
+                Statement stmt = connection.createStatement();
+                String query = "SELECT CONCAT('Location: ', placeCode, ' Time: ', forecastTimeUtc, ' , aT: ', airTemperature, ', fT: ', feelsLikeTemperature, ', windSpeed: ', windSpeed, ', conditionCode: ', conditionCode) AS WeatherInfo FROM forecast LIMIT 100";
+
+                ResultSet rs = stmt.executeQuery(query);
+
+                int i = 1;
+
+                while ( rs.next() ){
+                    String data = rs.getString("WeatherInfo");
+                    System.out.print("[" + i++ + "] ");
+
+                    System.out.println(data);}
+
+            } else System.out.println("Connection to DB !NOT! established");
+
+        } catch (Exception e) {
+            System.out.println("Error showing forecast data from the database.");
         }
     }
 

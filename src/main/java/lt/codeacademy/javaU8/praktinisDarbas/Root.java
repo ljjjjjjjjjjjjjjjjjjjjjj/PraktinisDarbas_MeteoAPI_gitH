@@ -27,6 +27,7 @@ public class Root {
         return sb.toString();}
     }
 
+
     public String toMySQL(){
         StringBuilder sb = new StringBuilder() ;
 
@@ -35,8 +36,8 @@ public class Root {
         } else {
 
             for (ForecastTimestamp forecast : forecastTimestamps) {
-                sb.append("('" + place.code + "', ");
-                sb.append(forecast.toMySQL() + "), ");
+                sb.append("(" + forecast.toMySQL());
+                sb.append(place.codeToMySQL() + "), ");
             }
 
             int lastIndexOfComma = sb.lastIndexOf(",");

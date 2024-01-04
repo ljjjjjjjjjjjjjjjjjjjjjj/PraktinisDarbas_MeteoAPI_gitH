@@ -111,7 +111,7 @@ public class Meteo {
     }
 
     public void saveForecastToMySQL(){
-        System.out.println("saveForecastToDatabase");
+        System.out.println("Saving selected forecast to MySQL");
 
         String placeCode = searchPlaceName();
         Root root = getForecast(placeCode);
@@ -121,7 +121,9 @@ public class Meteo {
 
     }
     public static void showDataBaseForecast(){
-        System.out.println("TBD");
+        System.out.println("Show saved forecasts from MySQL ");
+        MySQLDatabase.showDataFromMySQL();
+
     }
 
 

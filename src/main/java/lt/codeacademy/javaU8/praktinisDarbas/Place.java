@@ -34,4 +34,9 @@ public class Place {
                 "'" + countryCode +"'";
 
     }
+
+    public String codeToMySQL () {
+        return "'" + code + "'";
+
+    }
 }
